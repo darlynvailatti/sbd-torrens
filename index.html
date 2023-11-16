@@ -1,1 +1,78 @@
-SBD
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React!</title>
+    <style>
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">Loading...</div>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@material-ui/core@4/umd/material-ui.development.js"></script>
+    <script type="text/babel">
+        const { useState } = React;
+        const { TextField, Button, List, ListItem, ListItemText } = MaterialUI;
+    
+        function App() {
+            const [todos, setTodos] = useState([]);
+            const [newTodo, setNewTodo] = useState('');
+    
+            const handleNewTodoChange = (e) => {
+                setNewTodo(e.target.value);
+            };
+    
+            const handleNewTodo = (e) => {
+                e.preventDefault();
+                if(newTodo === '') return;
+                setTodos([...todos, newTodo]);
+                setNewTodo('');
+            };
+    
+            const handleDeleteTodo = (index) => {
+                const newTodos = [...todos];
+                newTodos.splice(index, 1);
+                setTodos(newTodos);
+            };
+    
+            return (
+                <div>
+                    <form onSubmit={handleNewTodo}>
+                        <TextField label="New todo" value={newTodo} onChange={handleNewTodoChange} />
+                        <Button type="submit">Add todo</Button>
+                    </form>
+                    <List>
+                        {todos.map((todo, index) => (
+                            <ListItem key={index}>
+                                <ListItemText primary={todo} />
+                                <Button onClick={() => handleDeleteTodo(index)}>
+                                    Delete
+                                </Button>
+                            </ListItem>
+                        ))}
+                    </List>
+                </div>
+            );
+        }
+    
+        ReactDOM.render(<App />, document.getElementById('root'));
+        document.getElementById('loading').style.display = 'none';
+    </script>
+</body>
+</html>
