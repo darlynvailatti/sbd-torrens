@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Container, Typography, Box, Snackbar, Alert, CircularProgress } from '@mui/material';
+import { Button, TextField, Container, Typography, Snackbar, Alert, CircularProgress, Paper } from '@mui/material';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,15 +17,10 @@ const Login = () => {
     setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
         navigate("/");
-        console.log(user);
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
         setErrorMessage(errorMessage);
         setOpen(true);
       }).finally(() => {
@@ -41,15 +36,13 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        marginTop={8}
+    <Container component="main" maxWidth="xs" sx={{paddingTop: 10}}>
+      <Paper
+        variant='outlined'
+        sx={{padding: 4}}
       >
-        <Typography component="h1" variant="h5">
-          Secure By Design
+        <Typography component="h1" variant="h3">
+          SBD - Torrens
         </Typography>
         <form onSubmit={onLogin} noValidate>
           <TextField
@@ -86,7 +79,7 @@ const Login = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Sign In'}
+            {loading ? <CircularProgress size={24} /> : 'Login'}
           </Button>
         </form>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
@@ -94,7 +87,7 @@ const Login = () => {
             {errorMessage}
           </Alert>
         </Snackbar>
-      </Box>
+      </Paper>
     </Container>
   );
 }
