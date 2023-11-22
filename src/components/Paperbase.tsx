@@ -5,6 +5,8 @@ import Link from '@mui/material/Link';
 import Navigator from './Navigator';
 import PeopleManagement from './PeopleManagement';
 import { Route, Routes } from 'react-router-dom';
+import Users from './Users';
+import AdminRoute from './AdminRoute';
 
 function Copyright() {
   return (
@@ -18,35 +20,35 @@ function Copyright() {
   );
 }
 
-
 const drawerWidth = 256;
 
 export default function Paperbase() {
   return (
-    
-      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-        <Box
-          component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        >
-          <Navigator
-            PaperProps={{ style: { width: drawerWidth } }}
-            sx={{ display: { sm: 'block', xs: 'none' } }}
-          />
+
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      >
+        <Navigator
+          PaperProps={{ style: { width: drawerWidth } }}
+          sx={{ display: { sm: 'block', xs: 'none' } }}
+        />
+      </Box>
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box component="main" sx={{ flex: 1, py: 6, px: 4 }}>
+
+          <Routes>
+            <Route path="/" element={<PeopleManagement />} />
+            <Route path="/users" element={<AdminRoute><Users /></AdminRoute>} />
+            {/* <Route path="/another" element={<AnotherComponent />} /> */}
+            {/* Add more routes as needed */}
+          </Routes>
         </Box>
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <Box component="main" sx={{ flex: 1, py: 6, px: 4 }}>
-            
-            <Routes>
-              <Route path="/" element={<PeopleManagement />} />
-              {/* <Route path="/another" element={<AnotherComponent />} /> */}
-              {/* Add more routes as needed */}
-            </Routes>
-          </Box>
-          <Box component="footer" sx={{ p: 2,  }}>
-            <Copyright />
-          </Box>
+        <Box component="footer" sx={{ p: 2, }}>
+          <Copyright />
         </Box>
       </Box>
+    </Box>
   )
 }

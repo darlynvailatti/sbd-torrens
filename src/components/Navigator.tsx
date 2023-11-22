@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Divider from '@mui/material/Divider';
 import Drawer, { DrawerProps } from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -15,6 +14,8 @@ import { auth } from '../firebase';
 import { useUser } from './UserContext';
 import { Chip, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom"
+import { useState } from 'react';
 
 const categories = [
   {
@@ -23,10 +24,10 @@ const categories = [
       {
         id: 'People',
         icon: <PeopleIcon />,
-        active: true,
-        roles: [".*"]
+        roles: [".*"],
+        path: '/'
       },
-      { id: 'Administration', icon: <DnsRoundedIcon />, roles:["admin"] },
+      { id: 'Users', icon: <DnsRoundedIcon />, roles: ["admin"], path: '/users' },
     ],
   },
 ];
@@ -43,34 +44,39 @@ const itemCategory = {
 };
 
 export default function Navigator(props: DrawerProps) {
+  const [activeMenuIndex, setActiveMenu] = useState<number>(0)
   const { ...other } = props;
   const userContext = useUser()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
-      signOut(auth).then(() => {
-        console.log("Signed out successfully")
-      }).catch((error) => {
-        toast.error(error.message)
-      });
+    signOut(auth).then(() => {
+      console.log("Signed out successfully")
+    }).catch((error) => {
+      toast.error(error.message)
+    });
   }
 
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        <ListItem sx={{ ...item, ...itemCategory}}>
+        <ListItem sx={{ ...item, ...itemCategory }}>
           <Typography variant='h5'>SBD</Typography>
-          
+
         </ListItem>
-        
+
         {categories.map(({ id, children }) => (
           <Box key={id} >
-            {children.map(({ id: childId, icon, active, roles }) => {
-              
+            {children.map(({ id: childId, icon, roles, path }, index) => {
+
               const hasPermission = RegExp(roles.join("|")).test(userContext?.metadata.roles.join("|"))
-              if(!hasPermission) return null
+              if (!hasPermission) return null
 
               return <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item}>
+                <ListItemButton selected={index === activeMenuIndex} sx={item} onClick={() => {
+                    setActiveMenu(index)
+                    if(path) navigate(path)
+                  }}>
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>
@@ -81,16 +87,16 @@ export default function Navigator(props: DrawerProps) {
         ))}
         <Box sx={{ flexGrow: 1 }} />
         <ListItem>
-          <ListItemText><Chip color='primary' label={userContext?.username}/></ListItemText>
+          <ListItemText><Chip color='primary' label={userContext?.username} /></ListItemText>
         </ListItem>
-      <ListItem>
-        <ListItemButton onClick={handleLogout}>
-          <ListItemIcon>
-            <Logout />
-          </ListItemIcon>
-          <ListItemText>Logout</ListItemText>
-        </ListItemButton>
-      </ListItem>
+        <ListItem>
+          <ListItemButton onClick={handleLogout}>
+            <ListItemIcon>
+              <Logout />
+            </ListItemIcon>
+            <ListItemText>Logout</ListItemText>
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

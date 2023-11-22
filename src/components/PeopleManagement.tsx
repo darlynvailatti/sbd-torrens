@@ -61,6 +61,8 @@ export default function PeopleManagement() {
 
   return (
     <Stack spacing={2}>
+
+      <Typography variant='h3'>People</Typography>
       {userContext?.metadata && !isAdmin() ? <Alert severity="warning">
         You're logged with the following roles {JSON.stringify(userContext?.metadata.roles)}. Limited access might be applied
       </Alert> : null}
