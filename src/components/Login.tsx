@@ -135,7 +135,7 @@ const Login = () => {
             >
               {loading ? <CircularProgress size={24} /> : 'Login'}
             </Button>
-            <Link variant="body2" onClick={handleOnResetPassword}>Forgot password?</Link>
+            <Link variant="body2" onClick={handleOnResetPassword}>Forgot credentials?</Link>
             
           </Stack>
         </form>

@@ -8,6 +8,7 @@ import { UserProvider } from './components/UserContext'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ResetPassword from './components/ResetPassword'
 
 let theme = createTheme({
   palette: {
@@ -31,6 +32,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="*" element={
               <PrivateRoute>
                 <Paperbase />
