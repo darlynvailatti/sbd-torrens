@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Drawer, Button, AppBar, Paper, Stack, Typography } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Drawer, AppBar, Paper, Stack, Typography, List, ListItem, ListItemText } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info';
 import { db } from '../firebase';
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { User } from '../types/common';
 
 function Users() {
@@ -18,11 +17,6 @@ function Users() {
             setUsers(loadedUsers)
         })
     }, []);
-
-    const handleDelete = (id: string) => {
-
-        // db.collection('users').doc(id).delete();
-    };
 
     return (
         <Stack spacing={2}>
@@ -51,9 +45,9 @@ function Users() {
                                         <IconButton onClick={() => setSelectedUser(user)}>
                                             <InfoIcon />
                                         </IconButton>
-                                        <IconButton onClick={() => handleDelete(user.user_id)}>
+                                        {/* <IconButton onClick={() => handleDelete(user.user_id)}>
                                             <DeleteIcon />
-                                        </IconButton>
+                                        </IconButton> */}
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -72,21 +66,26 @@ export interface UserDrawerProps {
 }
 
 function UserDrawer({ user, onClose }: UserDrawerProps) {
-    const [roles, setRoles] = useState(user.roles);
-
-    const handleSave = async () => {
-        const userRef = doc(db, "user", user.user_id);
-        await updateDoc(userRef, { roles });
-        onClose();
-    };
 
     return (
         <Drawer anchor="right" open={true} onClose={onClose}>
-            <div>
+            <List>
+                <ListItem>
+                    <ListItemText primary="Name" secondary={user?.name} />
+                </ListItem>
+                <ListItem>
+                    <ListItemText primary="Roles" secondary={user?.roles} />
+                </ListItem>
+                <ListItem>
+                    <ListItemText primary="UID" secondary={user?.user_id} />
+                </ListItem>
+                {/* Add more fields as needed */}
+            </List>
+            {/* <div>
                 <h2>{user.user_id}</h2>
                 <input value={roles.join(',')} onChange={e => setRoles(e.target.value.split(','))} />
                 <Button onClick={handleSave}>Save</Button>
-            </div>
+            </div> */}
         </Drawer>
     );
 }

@@ -15,8 +15,8 @@ export const PersonDrawer = ({ person, onClose }: PersonDrawerProps) => {
         return userContext?.metadata.roles.filter((p: string) => p === "medical").length > 0 || false
     }
 
-    const isRetailRole = () => {
-        return userContext?.metadata.roles.filter((p: string) => p === "retail").length > 0 || false
+    const isAccountingRole = () => {
+        return userContext?.metadata.roles.filter((p: string) => p === "accounting").length > 0 || false
     }
 
     const isAdmin = () => {
@@ -37,12 +37,12 @@ export const PersonDrawer = ({ person, onClose }: PersonDrawerProps) => {
                 <Card sx={{ marginBottom: 2 }}>
                     <CardContent>
                         <Typography variant="h6">Credit Card Information</Typography>
-                        {isRetailRole() || isAdmin() ?
+                        {isAccountingRole() || isAdmin() ?
                             <>
                                 <TextField fullWidth margin="normal" label="Credit Card Number" type="text" value={person.credit_card.number} />
                                 <TextField fullWidth margin="normal" label="Expiry Date" type="text" value={person.credit_card.expire_at} />
                             </>
-                            : <Alert color='warning'>You do not have permission to see retail data</Alert>
+                            : <Alert color='warning'>You do not have permission to see accounting data</Alert>
 
                         }
 
